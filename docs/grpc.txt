@@ -1,0 +1,20 @@
+- gPRC microservice can be accessed on nodePort 30002, or the `connection` service
+- You can use postman to test the request. Open postman, add a new gRPC request and import the `connection.proto` proto file.
+After importing, you should be able to select the `ConnectionService / FindContacts` from the dropdown menu next to url.
+
+- Sample data for testing:
+```json
+{
+    "end_date": {
+        "nanos": 0,
+        "seconds": "1609261200"
+    },
+    "meters": 5,
+    "person_id": 1,
+    "start_date": {
+        "nanos": 0,
+        "seconds": "1577811600"
+    }
+}
+
+```
