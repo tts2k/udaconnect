@@ -1,0 +1,334 @@
+{
+	"info": {
+		"_postman_id": "6a7f3c3d-04a8-49d7-afc3-88abc3b1896a",
+		"name": "UdaConnect API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30963595"
+	},
+	"item": [
+		{
+			"name": "api",
+			"item": [
+				{
+					"name": "locations",
+					"item": [
+						{
+							"name": "{location_id}",
+							"item": [
+								{
+									"name": "get location resource",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/locations/:location_id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"locations",
+												":location_id"
+											],
+											"variable": [
+												{
+													"key": "location_id",
+													"value": "<string>",
+													"description": "(Required) Unique ID for a given Location"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Success",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/api/locations/:location_id",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"locations",
+														":location_id"
+													],
+													"variable": [
+														{
+															"key": "location_id"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "persons",
+					"item": [
+						{
+							"name": "{person_id}",
+							"item": [
+								{
+									"name": "connection",
+									"item": [
+										{
+											"name": "get connection data resource",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/api/persons/:person_id/connection?distance=<string>&end_date=<string>&start_date=<string>",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"persons",
+														":person_id",
+														"connection"
+													],
+													"query": [
+														{
+															"key": "distance",
+															"value": "<string>",
+															"description": "Proximity to a given user in meters"
+														},
+														{
+															"key": "end_date",
+															"value": "<string>",
+															"description": "Upper bound of date range"
+														},
+														{
+															"key": "start_date",
+															"value": "<string>",
+															"description": "Lower bound of date range"
+														}
+													],
+													"variable": [
+														{
+															"key": "person_id",
+															"value": "<string>",
+															"description": "(Required) "
+														}
+													]
+												}
+											},
+											"response": [
+												{
+													"name": "Success",
+													"originalRequest": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{baseUrl}}/api/persons/:person_id/connection?distance=<string>&end_date=<string>&start_date=<string>",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"persons",
+																":person_id",
+																"connection"
+															],
+															"query": [
+																{
+																	"key": "distance",
+																	"value": "<string>",
+																	"description": "Proximity to a given user in meters"
+																},
+																{
+																	"key": "end_date",
+																	"value": "<string>",
+																	"description": "Upper bound of date range"
+																},
+																{
+																	"key": "start_date",
+																	"value": "<string>",
+																	"description": "Lower bound of date range"
+																}
+															],
+															"variable": [
+																{
+																	"key": "person_id"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												}
+											]
+										}
+									]
+								},
+								{
+									"name": "get person resource",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/persons/:person_id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"persons",
+												":person_id"
+											],
+											"variable": [
+												{
+													"key": "person_id",
+													"value": "<string>",
+													"description": "(Required) Unique ID for a given Person"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Success",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/api/persons/:person_id",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"persons",
+														":person_id"
+													],
+													"variable": [
+														{
+															"key": "person_id"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "post persons resource",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/persons",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"persons"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Success",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/persons",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"persons"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "get persons resource",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/persons",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"persons"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/persons",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"persons"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "/"
+		}
+	]
+}
