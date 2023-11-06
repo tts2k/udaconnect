@@ -4,9 +4,9 @@ and easily to implement on client-side for real-time update of location.
 
 2. Kafka
 - Location data received from SocketIO will be ingested and send to a Kafka Producer. I chose Kafka here because I can leverage the poll feature of Kafka consumer to update location
-data to database by batch.
+data to database int batches.
 
 3. gRPC
 - Communication between Person and Connection service will be handled by gRPC protobuf. The entire process of calculating and finding connection data is quite resource intensive,
-and therefore should be splitted into a separate service. Unlike location data, connection data is large and should be properly modeled/formatted, which is gRPC protobuf is a good choice
+and therefore should be splitted into a separate service. Unlike location data, connection data is large and should be properly modeled/formatted, which is why gRPC protobuf is a good choice
 in this case due to its declarative proto file. On top of that, gRPC server can be configured to run multithreaded, which enables the service to run multiple connection calculations in parallel.
