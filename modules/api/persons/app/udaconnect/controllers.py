@@ -1,36 +1,34 @@
 from datetime import datetime
 
+from google.protobuf.timestamp_pb2 import Timestamp
+
 from app.udaconnect.models import Connection, Location, Person
 from app.udaconnect.schemas import (
     ConnectionSchema,
     LocationSchema,
     PersonSchema,
 )
-from app.udaconnect.services import ConnectionService, LocationService, PersonService
+from app.udaconnect.services import LocationService, PersonService
+from app.config import CONNECTION_SRV_URL
 from flask import request
 from flask_accepts import accepts, responds
 from flask_restx import Namespace, Resource
-from typing import Optional, List
+from typing import List
+from app.udaconnect.connection_pb2 import FindContactMessage
+from app.udaconnect.connection_pb2_grpc import ConnectionServiceStub, grpc
 
 DATE_FORMAT = "%Y-%m-%d"
 
 api = Namespace("UdaConnect", description="Connections via geolocation.")  # noqa
 
+# grpc client initialization
+channel = grpc.insecure_channel(CONNECTION_SRV_URL)
+client = ConnectionServiceStub(channel)
 
-# TODO: This needs better exception handling
 
-
-@api.route("/locations")
 @api.route("/locations/<location_id>")
 @api.param("location_id", "Unique ID for a given Location", _in="query")
 class LocationResource(Resource):
-    @accepts(schema=LocationSchema)
-    @responds(schema=LocationSchema)
-    def post(self) -> Location:
-        request.get_json()
-        location: Location = LocationService.create(request.get_json())
-        return location
-
     @responds(schema=LocationSchema)
     def get(self, location_id) -> Location:
         location: Location = LocationService.retrieve(location_id)
@@ -67,17 +65,41 @@ class PersonResource(Resource):
 @api.param("distance", "Proximity to a given user in meters", _in="query")
 class ConnectionDataResource(Resource):
     @responds(schema=ConnectionSchema, many=True)
-    def get(self, person_id) -> ConnectionSchema:
+    def get(self, person_id) -> List[Connection]:
         start_date: datetime = datetime.strptime(
             request.args["start_date"], DATE_FORMAT
         )
         end_date: datetime = datetime.strptime(request.args["end_date"], DATE_FORMAT)
-        distance: Optional[int] = request.args.get("distance", 5)
+        distance: int = int(request.args.get("distance", 5))
 
-        results = ConnectionService.find_contacts(
-            person_id=person_id,
-            start_date=start_date,
-            end_date=end_date,
+        start_date_ts = Timestamp()
+        start_date_ts.FromDatetime(start_date)
+        end_date_ts = Timestamp()
+        end_date_ts.FromDatetime(end_date)
+
+        grpcRequest = FindContactMessage(
+            person_id=int(person_id),
+            start_date=start_date_ts,
+            end_date=end_date_ts,
             meters=distance,
         )
+        connectionResponse = client.FindContacts(grpcRequest)
+
+        results: List[Connection] = []
+        for connection in connectionResponse.connections:
+            location = Location(
+                id=connection.location.id,
+                person_id=connection.location.person_id,
+                creation_time=connection.location.creation_time.ToDatetime(),
+            )
+            location.set_wkt_with_coords(
+                connection.location.latitude, connection.location.longitude
+            )
+            person = Person(
+                id=connection.person.id,
+                first_name=connection.person.first_name,
+                last_name=connection.person.last_name,
+            )
+            results.append(Connection(person=person, location=location))
+
         return results

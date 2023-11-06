@@ -1,0 +1,74 @@
+services:
+  postgre:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_DB: udaconnect
+  zookeeper:
+      image: 'bitnami/zookeeper:latest'
+      ports:
+        - '2181:2181'
+      environment:
+        - ALLOW_ANONYMOUS_LOGIN=yes
+  kafka:
+    image: 'bitnami/kafka:latest'
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    ports: 
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+  location_consumer:
+    build: ./modules/api/location_consumer/
+    environment:
+      - DB_HOST=postgre
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=password
+      - DB_NAME=udaconnect
+      - KAFKA_URL=kafka:9092
+    depends_on:
+      - kafka
+      - postgre
+  location_ingestor:
+    build: ./modules/api/location_ingestor/
+    environment:
+      - KAFKA_URL=kafka:9092
+    ports: 
+      - "8000:8000"
+    depends_on:
+      - kafka
+      - postgre
+  connection:
+    build: ./modules/api/connection/
+    environment:
+      - DB_HOST=postgre
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=password
+      - DB_NAME=udaconnect
+    ports:
+      - "5005:5005"
+    depends_on:
+      - postgre
+  person:
+    build: ./modules/api/persons
+    environment:
+      - DB_HOST=postgre
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=password
+      - DB_NAME=udaconnect
+      - CONNECTION_SRV_URL=connection:5005
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgre

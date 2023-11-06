@@ -1,0 +1,1 @@
+window.REACT_APP_PERSON_URL=undefined

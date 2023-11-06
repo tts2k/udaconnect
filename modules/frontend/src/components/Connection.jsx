@@ -1,4 +1,5 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class Connection extends Component {
   constructor(props) {
@@ -18,18 +19,17 @@ class Connection extends Component {
     }
   }
 
-  getConnections = (personId) => {
+  getConnections(personId) {
     if (personId) {
       // TODO: endpoint should be abstracted into a config variable
       fetch(
-        `http://localhost:30001/api/persons/${personId}/connection?start_date=2020-01-01&end_date=2020-12-30&distance=5`
+        `http://${window.REACT_APP_PERSON_URL}/api/persons/${personId}/connection?start_date=2020-01-01&end_date=2020-12-30&distance=5`
       )
         .then((response) => response.json())
-        .then((connections) =>
-          this.setState({
-            connections: connections,
-            personId: this.state.personId,
-          })
+        .then((connections) => this.setState({
+          connections: connections,
+          personId: this.state.personId,
+        }),
         );
     }
   };
@@ -64,4 +64,9 @@ class Connection extends Component {
     );
   }
 }
+
+Connection.propTypes = {
+  personId: PropTypes.number
+}
+
 export default Connection;

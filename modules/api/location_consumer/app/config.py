@@ -6,6 +6,7 @@ DB_PASSWORD = os.environ["DB_PASSWORD"]
 DB_HOST = os.environ["DB_HOST"]
 DB_PORT = os.environ["DB_PORT"]
 DB_NAME = os.environ["DB_NAME"]
+KAFKA_URL = os.environ["KAFKA_URL"]
 
 
 class BaseConfig:
@@ -13,19 +14,16 @@ class BaseConfig:
     USE_MOCK_EQUIVALENCY = False
     DEBUG = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_DATABASE_URI = (
+        f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+    )
 
 
 class DevelopmentConfig(BaseConfig):
     CONFIG_NAME = "dev"
-    SECRET_KEY = os.getenv(
-        "DEV_SECRET_KEY", "You can't see California without Marlon Widgeto's eyes"
-    )
     DEBUG = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     TESTING = False
-    SQLALCHEMY_DATABASE_URI = (
-        f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-    )
 
 
 class TestingConfig(BaseConfig):
@@ -34,9 +32,6 @@ class TestingConfig(BaseConfig):
     DEBUG = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = (
-        f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-    )
 
 
 class ProductionConfig(BaseConfig):
@@ -45,9 +40,6 @@ class ProductionConfig(BaseConfig):
     DEBUG = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     TESTING = False
-    SQLALCHEMY_DATABASE_URI = (
-        f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-    )
 
 
 EXPORT_CONFIGS: List[Type[BaseConfig]] = [

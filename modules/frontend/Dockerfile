@@ -10,8 +10,10 @@ RUN npm install react-scripts@3.4.3 -g
 
 CMD ["pwd"]
 COPY . ./
+RUN chmod +x generate_env_script.sh
+RUN chmod +x start.sh
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["./start.sh"]
 

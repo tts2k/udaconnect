@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: location-ingestor
+  name: location-ingestor
+spec:
+  ports:
+  - name: "8000"
+    port: 8000
+    targetPort: 8000
+    nodePort: 30001
+  selector:
+    service: location-ingestor
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: location-ingestor
+  name: location-ingestor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: location-ingestor
+  template:
+    metadata:
+      labels:
+        service: location-ingestor
+    spec:
+      containers:
+      - image: tts2k/location_ingestor:latest
+        name: location-ingestor
+        imagePullPolicy: Always
+        env:
+        - name: KAFKA_URL
+          valueFrom:
+            configMapKeyRef:
+              name: kafka-env
+              key: KAFKA_URL
+      restartPolicy: Always

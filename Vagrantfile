@@ -24,9 +24,8 @@ Vagrant.configure("2") do |config|
     for p in 30000..30100 # expose NodePort IP's
       master.vm.network "forwarded_port", guest: p, host: p, protocol: "tcp"
       end
-    master.vm.provider "virtualbox" do |v|
+    master.vm.provider "libvirt" do |v|
       v.memory = "3072"
-      v.name = "master"
       end
     master.vm.provision "shell", inline: <<-SHELL
       sudo zypper refresh
@@ -73,12 +72,13 @@ Vagrant.configure("2") do |config|
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
   #
-  # config.vm.provider "virtualbox" do |vb|
+  # config.vm.provider "libvirt" do |vb|
   #   # Display the VirtualBox GUI when booting the machine
-  #   vb.gui = true
-  #
+  #   # vb.gui = true
+  #   #
   #   # Customize the amount of memory on the VM:
-  #   vb.memory = "1024"
+  #   vb.memory = "4097"
+  #   vb.cpus = 4
   # end
   #
   # View the documentation for the provider you are using for more
